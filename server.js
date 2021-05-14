@@ -2,6 +2,7 @@ const express  = require('express');
 const next     = require('next');
 const path     = require('path');
 const url      = require('url');
+const cors     = require('cors');
 const cluster  = require('cluster');
 const numCPUs  = require('os').cpus().length;
 const redis    = require('redis');
@@ -42,7 +43,8 @@ if (!dev && cluster.isMaster) {
   nextApp.prepare()
     .then(() => {
       const server = express();
-
+      server.use(cors());
+      
       if (dev) {
         // In dev, heartbeat in the single process.
         redisHeartbeat(REDIS_URL, heartbeatSecs);
